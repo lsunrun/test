@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no,minimal-ui" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="format-detection" content="telephone=no" />
+    <title> Sprite Sheet Animation</title>
+    <style>
+        body {
+            font-size: 12px;
+        }
+
+        section {
+            width: 500px;
+            text-align: center;
+        }
+
+        /* star */
+        .star {
+            /* 如果为横向的雪碧图 则 height 为图片分辨率的高，反之若为纵向雪碧图 则 width 为图片分辨率的宽*/
+            /* 这里为横向图  1800*60  所以height:60px ，宽的话随意设定只要能把图片显示出来都是可以的*/
+            width: 60px;
+            height: 60px;
+            box-shadow: 0 0 5px 0 #939393;
+            /*这些都是为了显眼设置 不是必须的  */
+            margin: 10px auto;
+            /*这些都是为了显眼设置 不是必须的  */
+            background: url(./image/stars.png);
+        }
+
+        @keyframes star {
+            0% {
+                background-position: 0;
+            }
+
+            100% {
+                background-position: -1740px;
+            }
+
+            /* to {background-position:100%;} */
+        }
+
+        #starcss {
+            /*star是keyframes动画名称   第一个时间是完成动画花费的时间第二是延迟多少秒开始动画  然后是无限循环，normal是正常顺序播放 （reverse为反向）*/
+            animation: star 2000ms steps(29, end) 0ms infinite normal;
+            /* 这个动画中的 steps(29, end)   29指的是雪碧图里面图与图的间隔，必须为正整数，必选，把动画分割的段数， 即 a.b.c（a|b|c） 之中有两个点（或者|），分为两段*/
+              /* 用css 需要知道间段数 ：29 */
+        }
+
+        /* 地鼠 */
+        .ds {
+            width: 400px;
+            height: 430px;
+            margin: 10px auto;
+            background: url(./image/Mouse.png);
+        }
+
+        @keyframes mouse {
+            from {
+                background-position: 0;
+            }
+
+            to {
+                background-position: -9890px;
+            }
+
+        
+        }
+
+        #ds {
+            /*star是keyframes动画名称   第一个时间是完成动画花费的时间第二是延迟多少秒开始动画  然后是无限循环，normal是正常顺序播放 （reverse为反向）*/
+            animation: mouse 2000ms steps(23, end) 0ms infinite normal;
+              /* 用css 需要知道间段数 ：23 */
+        }
+
+        /* light */
+
+        .light {
+            position: relative;
+            width: 614px;
+            height: 161px;
+            background: url(./image/LOGO_05.png) no-repeat;
+        }
+
+        @keyframes light {
+             from {
+                background-position-y: 0;
+            }
+
+            to {
+                background-position-y: 100%;
+            } 
+        }
+
+        .lighta {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background: url(./image/light.png) no-repeat;
+            background-position: 0 0;
+            background-size: 100% auto;
+            /*star是keyframes动画名称   第一个时间是完成动画花费的时间第二是延迟多少秒开始动画  然后是无限循环，normal是正常顺序播放 （reverse为反向）*/
+            animation: light 1450ms steps(23, end) 0ms infinite normal;
+            /* 用css 需要知道间段数 ：23 */
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 星星js控制的 -->
+    <section>
+        <!-- <div class="star" id="starjs"></div>
+        <div>星星js控制的</div> -->
+        <!-- <span>
+            <button id="cssPlay">播放/暂停</button>
+            <button id="cssSlowDown">-减速-</button>
+            <button id="cssSpeedUp">+加速+</button>
+            <button id="cssReverse">切换播放顺序</button>
+        </span> -->
+    </section>
+    <script>
+        let css = document.getElementById('starjs');
+        // let cssPlay = document.getElementById('cssPlay');
+        // let cssSlowDown = document.getElementById('cssSlowDown');
+        // let cssSpeedUp = document.getElementById('cssSpeedUp');
+        // let cssReverse = document.getElementById('cssReverse');
+        let xPos = 0;
+        let interval = 33.333333;  //100 是3s
+        let direction = -1; // -1: forward, 1: reverse
+        function cstarnimate() {
+                                                    // //需要知道图片分辨率的高
+            css.style.backgroundPosition = direction * (xPos += 60) % 1800 + 'px';
+        }
+        function resetInterval() {
+            clearInterval(timer);
+            timer = setInterval(cstarnimate, interval);
+        }
+        /* Initial timer setup */
+        // let timer = setInterval(cstarnimate, interval);
+        // cssPlay.addEventListener('click', function() {
+        //     if(timer) {
+        //         clearInterval(timer);
+        //         timer = undefined;
+        //     } else {
+        //         timer = setInterval(cstarnimate, interval);
+        //     }
+        // });
+        // cssSlowDown.addEventListener('click', function() {
+        //     if(interval + 10 >= 200) interval = 200;
+        //     else interval += 10;
+        //     resetInterval();
+        // });
+        // cssSpeedUp.addEventListener('click', function() {
+        //     if(interval - 10 <= 20) interval = 20;
+        //     else interval -= 10;
+        //     resetInterval();
+        // });
+        // cssReverse.addEventListener('click', function() {
+        //     if(direction === 1) direction = -1;
+        //     else direction = 1;
+        //     resetInterval();
+        // });
+    </script>
+
+    <section>--------</section>
+
+    <!-- 星星css animation 写的 -->
+    <section>
+        <div class="star" id="starcss"></div>
+        <div>星星css animation 写的</div>
+        <!-- <span>
+                    <button id="starcssPlay">播放/暂停</button>
+                    <button id="starcssSlowDown">-减速-</button>
+                    <button id="starcssSpeedUp">+加速+</button>
+                    <button id="starcssReverse">切换播放顺序</button>
+                </span> -->
+    </section>
+    <script>
+            // var starcss = document.getElementById('starcss');
+            // let starcssPlay = document.getElementById('starcssPlay');
+            // let starcssSlowDown = document.getElementById('starcssSlowDown');
+            // let starcssSpeedUp = document.getElementById('starcssSpeedUp');
+            // let starcssReverse = document.getElementById('starcssReverse');
+            // starcssPlay.addEventListener('click', function() {
+            //     if(getComputedStyle(starcss).animationPlayState === 'running') {
+            //         starcss.style.animationPlayState = 'paused';
+            //     } else {
+            //         starcss.style.animationPlayState = 'running';
+            //     }
+            // });
+            // starcssSlowDown.addEventListener('click', function() {
+            //     let duration = +getComputedStyle(starcss).animationDuration.slice(0, -1);
+            //     if(duration + 0.3 >= 6) duration = 6;
+            //     else duration += 0.3;
+            //     starcss.style.animationDuration = duration + 's';
+            // });
+            // starcssSpeedUp.addEventListener('click', function() {
+            //     let duration = +getComputedStyle(starcss).animationDuration.slice(0, -1);
+            //     if(duration - 0.3 <= 0.6) duration = 0.6;
+            //     else duration -= 0.3;
+            //     starcss.style.animationDuration = duration + 's';
+            // });
+            // starcssReverse.addEventListener('click', function() {
+            //     if(getComputedStyle(starcss).animationDirection === 'normal') {
+            //         starcss.style.animationDirection = 'reverse';
+            //     } else {
+            //         starcss.style.animationDirection = 'normal';
+            //     }
+            // });
+    </script>
+
+
+    <section>--------</section>
+
+
+    <!-- 地鼠 css  和js 分别都有-->
+    <section>
+        <div class="ds" id="ds"></div>
+        <div>地鼠</div>
+    </section>
+    <script>
+        // 用js 不需要知道间段数
+        var ds = document.getElementById('ds');
+        var xPos4 = 0;
+        var interval4 = 50;  //100 是3s    周期定时器，什么时间开始执行
+        var direction4 = -1; // -1: forward, 1: reverse  负数为正 从左往右播放
+        function cstarnimate() {
+            //横向雪碧图 高分辨率宽430px
+            // 求余的好处是 不会出现小数，而且利用的是加法 ， 最初的初始位置是430 ，然后一直累加 860 , 
+            // 求余之后 860% 10320 = 860 , 2580% 10320 = 2580 ... 最后 10320%10320 = 0， 这些都是倍数关系， 10750%10320 = 430，往后的结果都是重复的
+            // 不想要数字那么大也可以加个判断
+            if (xPos4 == 10320) xPos4 = 0; //可以重新归0， 初始位置
+            xPos4 = xPos4 + 430; //需要知道图片分辨率的高
+            ds.style.backgroundPosition = direction4 * xPos4 % 10320 + 'px';
+        }
+        var timer4 = null;
+        function resetInterval() {
+            clearInterval(timer4);
+            timer4 = setInterval(cstarnimate, interval4);
+        }
+        /* Initial timer setup */
+        // timer4 = setInterval(cstarnimate, interval4);
+
+
+    </script>
+
+    <section>--------</section>
+
+    <!--  css animation流光字 -->
+    <section>
+        <div class="light">
+            <div class="lighta"></div>
+        </div>
+        <div>流光字</div>
+    </section>
+
+
+</body>
+
+</html>

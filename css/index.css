@@ -1,0 +1,39 @@
+.top {
+    width: 7.5rem;
+    height: 9.58rem;
+    background: url('../image/top.png') no-repeat;
+    background-size: 100%;
+    position: relative;
+  }
+  
+  .btn-logo2 {
+    width: 4.47rem;
+    height: .77rem;
+    position: absolute;
+    top: 1.2rem;
+    left: 1.7rem;
+  }
+  
+  .btn-share {
+    width: .7rem;
+    height: .7rem;
+    position: absolute;
+    right: 0.56rem;
+    bottom: .3rem;
+  }
+  
+  .first {
+    width: 7.5rem;
+    height: 5.71rem;
+    background: url('../image/1.png') no-repeat;
+    background-size: 100%;
+    position: relative;
+  }
+  
+  .gz {
+    width: 1.17rem;
+    height: .42rem;
+    position: absolute;
+    right: 0.444rem;
+    top: 1.3rem;
+  }
