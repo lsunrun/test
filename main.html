@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0
+        }
+
+        body,
+        html {
+            height: 100%;
+        }
+
+        ul,
+        li {
+            /* position: relative; */
+            margin: 0;
+            padding: 0;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            list-style: none;
+        }
+
+        header,
+        footer {
+            position: fixed;
+            z-index: 9;
+            width: 100%;
+            height: 60px;
+            font-size: 24px;
+            color: #333;
+            font-weight: bold;
+            text-align: center;
+            line-height: 60px;
+            background: #77d677;
+        }
+
+        footer {
+            bottom: 0;
+        }
+
+        section {
+            padding: 60px 0;
+        }
+
+        nav {
+            background: #93f393;
+            color: #333;
+        }
+
+        nav li {
+            padding: 10px 20px;
+        }
+
+        nav li.active {
+            background: #77d677;
+        }
+
+        article {
+            font-size: 24px;
+            text-align: center;
+            background: #d9ffd9;
+        }
+
+        /* default */
+        section.default nav {
+            position: absolute;
+            top: 60px;
+            bottom: 60px;
+            width: 200px;
+        }
+
+        section.default nav li {
+            padding: 10px 20px;
+        }
+
+        section.default nav li.active {
+            background: #77d677;
+        }
+
+        section.default article {
+            padding-left: 220px;
+        }
+
+        /*  使用div 滚动 document.getElementsByTagName("article")[0].scrollTop*/
+        section.flexModal {
+            height: calc(100% - 120px);
+            overflow: hidden;
+        }
+
+        section.fixedLeft article {
+            margin-left: 80px;
+            overflow: auto;
+            height: 100%;
+        }
+
+        /* 使用html的滚动  document.documentElement.scrollTop */
+        /* section.flexModal {
+            min-height: calc(100% - 120px);
+        } */
+
+        section.flexModal nav {
+            width: 80px;
+            overflow: hidden;
+        }
+
+        section.flexModal article {
+            flex: 1;
+        }
+
+        /* fixedLeft */
+        section.fixedLeft nav {
+            position: fixed;
+            top: 60px;
+            bottom: 60px;
+        }
+    </style>
+
+</head>
+
+<body>
+    <header>我是头部position: fixed;z-index: 9;</header>
+    <section class="flexModal fixedLeft">
+        <nav>
+            <ul>
+                <li>section.flexModal nav ul>li*5</li>
+                <li>栏目一</li>
+                <li>栏目二</li>
+                <li class="active">栏目三</li>
+                <li>栏目四</li>
+                <li>栏目五</li>
+            </ul>
+        </nav>
+        <article>
+            <h3>
+                内容区域 section.flexModal articel
+            </h3>
+            <p>
+                section{
+                padding: 60px 0;
+                }
+            </p>
+            <p style="height: 2000px">
+                section.flexModal{
+                display: flex;
+                }
+            </p>
+            <p>
+                section.flexModal nav{
+                width: 200px;
+                }
+            </p>
+            <p>
+                最后一个
+            </p>
+        </article>
+    </section>
+    <footer>底部版权同头部 position: fixed;z-index: 9;</footer>
+</body>
+
+</html>

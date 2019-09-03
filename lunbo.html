@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+        <meta name="viewport"
+        content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta charset="utf-8">
+    <title></title>
+</head>
+
+<script src="js/lib/jquery-1.11.1.min.js"></script>
+<style>
+    .banner {
+        margin: 0 auto;
+        border: 4px dashed black;
+        width: 400px;
+        height: 200px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .banner a {
+        z-index: 100;
+        display: block;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        left: 100%;
+        top: 0;
+    }
+
+    .banner .first {
+        left: 0;
+    }
+
+    .banner a img {
+        width: 100%;
+        height: 100%;
+    }
+
+    .choose {
+        z-index: 1000;
+        position: absolute;
+        left: 150px;
+        top: 180px;
+        width: 100px;
+        height: 10px;
+    }
+
+    .choose span {
+        margin-right: 15px;
+        float: left;
+        display: block;
+        background: blue;
+        width: 10px;
+        height: 10px;
+        border-radius: 10px;
+    }
+
+    .choose .red {
+        background: red;
+    }
+
+    .banner .pre,
+    .next {
+        cursor: pointer;
+        text-align: center;
+        border-radius: 20px;
+        display: block;
+        background: #cccccc;
+        opacity: 0.4;
+        text-decoration: none;
+        z-index: 200;
+        display: block;
+        width: 40px;
+        height: 40px;
+        font-size: 40px;
+        color: red;
+        position: absolute;
+        top: 80px;
+    }
+
+    .banner .pre {
+        left: 0px
+    }
+
+    .banner .next {
+        right: 0px;
+    }
+</style>
+
+<body>
+
+    <div class="banner">
+        <!--这里为上一页下一页点击按钮 -->
+        <span class="pre tab">-</span>
+        <span class="next tab">+</span>
+        <!--此处为轮播主体，颜色块代替。图片自加-->
+        <a href="###" class="first" style="background: pink;"><img src="image/banner1.jpg" /></a>
+        <a href="###" style="background: blue;"><img src="image/banner2.jpg" /></a>
+        <a href="###" style="background: greenyellow;"><img src="image/banner3.jpg" /></a>
+        <a href="###" style="background: deepskyblue;"><img src="image/banner4.jpg" /></a>
+        <!--此处为轮播部分下方小点选择 -->
+        <div class="choose">
+            <span class="red"></span>
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+    <script>
+        /*定义两个变量，保存当前页码和上一页页码*/
+        var $index = 0;
+        var $preindex = 0;
+        var $lastindex = $(".banner>a img").length - 1;
+        /*小点的鼠标移入事件，触发图片左移还是右移*/
+        $(".choose span").mouseenter(function () {
+            //获取当前移入的index值
+            $index = $(this).index();
+
+            //判断如果index变小，证明图片要往左移动。变大则为右移
+            if ($index > $preindex) {
+                tabImg(true);
+            } else if ($index < $preindex) {
+                tabImg(false);
+            }
+        });
+
+        // 鼠标移入的时候就禁止滚动
+        $(".banner").mouseenter(function () {
+            clearInterval(atime);
+        }).mouseleave(function () {
+            setIntervalTime();
+        })
+
+
+
+        $(".tab").click(function () {
+            var sign = this.className.indexOf('next') > -1;
+            orgImg(sign);
+        })
+
+        function orgImg(sign) {
+            if (sign) {
+                $index++;
+                if ($index > $lastindex) { //大于最后一张的时候
+                    $index = 0
+                }
+                tabImg(sign);
+            } else {
+                $index--;
+                if ($index < 0) { //点击上一页是首个的时候改为最后一个
+                    $index = $lastindex
+                };
+                tabImg(sign);
+            }
+        }
+
+        function tabImg(sign) {
+            if (sign) {
+                // 下一张图
+                $(".banner a").eq($preindex).stop(true, true).animate({ "left": "-100%" });
+                $(".banner a").eq($index).stop(true, true).css("left", "100%").animate({ "left": "0" });
+            } else {
+                // 上一张图
+                $(".banner a").eq($preindex).stop(true, true).animate({ "left": "100%" });
+                $(".banner a").eq($index).stop(true, true).css("left", "-100%").animate({ "left": "0" });
+            }
+            //改变圆点的颜色
+            $(".choose span").removeClass("red").eq($index).addClass("red");
+            //移动完毕将当前index值替换了前页index
+            $preindex = $index;
+        }
+
+        //加个定时器，正常轮播
+        var atime = null;
+        function setIntervalTime() {
+            atime = setInterval(function () {
+                orgImg(true);
+            }, 2000);
+        }
+        // setIntervalTime()
+
+        /*
+        *  stop 是停止动画，animate是动画，让图片过渡的
+        *  $(".banner a").eq($index).stop(true, true).css("left", "100%").animate({ "left": "0" });
+        *  $index这个已经++过了，先把当前即将要显示的图片瞬间移到右边,然后通过动画移动到中间
+        *
+        *   $(".banner a").eq($preindex).stop(true, true).animate({ "left": "-100%" });
+        *   其实$preindex是原来当前$index的下标，这个相应的动作就是把当前的图片移到左边就可以，
+        *
+        *   综合上面的动作就可以有图片至右往左带的效果。
+        *    假设上一个是$preindex下标0或者4，把它移到左边，然后接着要显示的图片$index（1或者0，已经++了）从右边100%处移动到0 中间处。
+        */
+
+    </script>
+</body>
+
+</html>

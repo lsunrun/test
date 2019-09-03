@@ -46,7 +46,7 @@
             /*star是keyframes动画名称   第一个时间是完成动画花费的时间第二是延迟多少秒开始动画  然后是无限循环，normal是正常顺序播放 （reverse为反向）*/
             animation: star 2000ms steps(29, end) 0ms infinite normal;
             /* 这个动画中的 steps(29, end)   29指的是雪碧图里面图与图的间隔，必须为正整数，必选，把动画分割的段数， 即 a.b.c（a|b|c） 之中有两个点（或者|），分为两段*/
-              /* 用css 需要知道间段数 ：29 */
+            /* 用css 需要知道间段数 ：29 */
         }
 
         /* 地鼠 */
@@ -66,13 +66,13 @@
                 background-position: -9890px;
             }
 
-        
+
         }
 
         #ds {
             /*star是keyframes动画名称   第一个时间是完成动画花费的时间第二是延迟多少秒开始动画  然后是无限循环，normal是正常顺序播放 （reverse为反向）*/
             animation: mouse 2000ms steps(23, end) 0ms infinite normal;
-              /* 用css 需要知道间段数 ：23 */
+            /* 用css 需要知道间段数 ：23 */
         }
 
         /* light */
@@ -85,13 +85,13 @@
         }
 
         @keyframes light {
-             from {
+            from {
                 background-position-y: 0;
             }
 
             to {
                 background-position-y: 100%;
-            } 
+            }
         }
 
         .lighta {
@@ -113,8 +113,8 @@
 <body>
     <!-- 星星js控制的 -->
     <section>
-        <!-- <div class="star" id="starjs"></div>
-        <div>星星js控制的</div> -->
+        <div class="star" id="starjs"></div>
+        <div>星星js控制的</div>
         <!-- <span>
             <button id="cssPlay">播放/暂停</button>
             <button id="cssSlowDown">-减速-</button>
@@ -132,15 +132,15 @@
         let interval = 33.333333;  //100 是3s
         let direction = -1; // -1: forward, 1: reverse
         function cstarnimate() {
-                                                    // //需要知道图片分辨率的高
-            css.style.backgroundPosition = direction * (xPos += 60) % 1800 + 'px';
+            css.style.backgroundPosition = direction * (xPos += 60) % 1800 + 'px';   // //需要知道图片分辨率的高
         }
+
         function resetInterval() {
             clearInterval(timer);
             timer = setInterval(cstarnimate, interval);
         }
         /* Initial timer setup */
-        // let timer = setInterval(cstarnimate, interval);
+        let timer = setInterval(cstarnimate, interval);
         // cssPlay.addEventListener('click', function() {
         //     if(timer) {
         //         clearInterval(timer);

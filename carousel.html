@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        html,
+        body,
+        h1,
+        h2,
+        h3,
+        ul,
+        li,
+        p {
+            margin: 0;
+            padding: 0;
+        }
+
+        .carousel-wrap,
+        .carousel-box {
+            position: relative;
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .carousel-list {
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .choose {
+            z-index: 1000;
+            position: absolute;
+            left: 150px;
+            top: 180px;
+            width: 100px;
+            height: 10px;
+        }
+
+        .carousel-circle {
+            position: absolute;
+        }
+
+        .carousel-circle span {
+            margin-right: 15px;
+            float: left;
+            display: block;
+            background: blue;
+            width: 10px;
+            height: 10px;
+            border-radius: 10px;
+        }
+
+        .carousel-circle .active {
+            background: red;
+        }
+
+        .arrows-pre,
+        .arrows-next {
+            position: absolute;
+
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="carousel-wrap">
+        <div class="carousel-box">
+            <ul class="carousel-list">
+                <a href="javascript:;"><img src="img/temp_pic_1.jpg"></a>
+                <a href="javascript:;"><img src="img/temp_pic_2.jpg"></a>
+                <a href="javascript:;"><img src="img/temp_pic_3.jpg"></a>
+                <a href="javascript:;"><img src="img/temp_pic_4.jpg"></a>
+                <a href="javascript:;"><img src="img/temp_pic_5.jpg"></a>
+                <!-- 如果是要显示三张图片并排 那下面也是补开头三张，这样scrollLeft = 0的时候就不会有晃动 ，如果是一张显示 那就写一个就可以了-->
+                <!-- <a href="javascript:;"><img src="img/temp_pic_1.jpg"></a> -->
+            </ul>
+        </div>
+        <span class="arrows-pre">&#139</span>
+        <span class="arrows-next">&#155</span>
+        <div class="carousel-circle">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+
+</body>
+<script src="js/lib/jquery-1.11.1.min.js"></script>
+<script>
+    // ul的宽必须是两倍以上才能使用scrollLeft来进行轮换滑动
+    $("carousel-list").width(data.length * 3);
+</script>
+
+</html>

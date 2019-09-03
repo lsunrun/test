@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        p {
+            position: absolute;
+        }
+    </style>
+</head>
+
+<body>
+    <input type="file" onchange="changepic(this)"></div>
+    <!-- <p>213123123</p> -->
+    <script src="js/lib/jquery-1.11.1.min.js"></script>
+    <script>
+        function changepic(event) {
+            var form = new FormData(); // FormData 对象
+            form.append("file", fileObj); // 文件对象
+            xhr = new XMLHttpRequest();  // XMLHttpRequest 对象
+            xhr.open("post", url, true); //post方式，url为服务器请求地址，true 该参数规定请求是否异步处理。
+            xhr.onload = onload; //请求完成 回调
+            xhr.setRequestHeader("token", "878");
+            xhr.onerror = uploadFailed; //请求失败回调
+        }
+        function onload(){
+
+        }
+        function uploadFailed(){
+            
+        }
+
+        // var s = null;
+        // setInterval(function () {
+        //     console.log(1)
+        //     $("p").animate({ top: "200px" });
+        //     clearTimeout(s)
+        //     s = setTimeout(function () { $("p").animate({ top: 0 }); }, 950)
+        // }, 2000)
+    </script>
+</body>
+
+</html>
