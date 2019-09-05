@@ -19,7 +19,18 @@
             padding: 0;
         }
 
-        .carousel-wrap,
+        ul,
+        li {
+            list-style: none;
+        }
+
+        .carousel-wrap {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            position: relative;
+        }
+
         .carousel-box {
             position: relative;
             height: 100%;
@@ -29,7 +40,14 @@
 
         .carousel-list {
             width: 100%;
+            height: 100%;
             overflow: hidden;
+        }
+
+        .carousel-list li {
+            width: 180px;
+            height: 100%;
+            float: left;
         }
 
         .choose {
@@ -43,59 +61,279 @@
 
         .carousel-circle {
             position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            bottom: 10px;
+            cursor: pointer;
         }
 
         .carousel-circle span {
-            margin-right: 15px;
+            margin-right: 10px;
             float: left;
             display: block;
-            background: blue;
+            background: rgba(0, 0, 0, 0.8);
             width: 10px;
             height: 10px;
             border-radius: 10px;
         }
 
-        .carousel-circle .active {
-            background: red;
+
+        .carousel-circle span:last-child {
+            margin-right: 0;
         }
 
-        .arrows-pre,
+        .carousel-circle .active {
+            background: #fff;
+        }
+
+        .arrows-prev,
         .arrows-next {
             position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 999;
+            cursor: pointer;
+            width: 27px;
+            height: 22px;
+            background-size: 27px 44px;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
 
+        .arrows-prev {
+            left: 0;
+            background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%2027%2044'%3E%3Cpath%20d%3D'M0%2C22L22%2C0l2.1%2C2.1L4.2%2C22l19.9%2C19.9L22%2C44L0%2C22L0%2C22L0%2C22z'%20fill%3D'%23007aff'%2F%3E%3C%2Fsvg%3E");
+        }
+
+        .arrows-next {
+            right: 0;
+            background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%2027%2044'%3E%3Cpath%20d%3D'M27%2C22L27%2C22L5%2C44l-2.1-2.1L22.8%2C22L2.9%2C2.1L5%2C0L27%2C22L27%2C22z'%20fill%3D'%23007aff'%2F%3E%3C%2Fsvg%3E");
+        }
+
+        #carousel {
+            height: 120px;
+            width: 180px;
+            margin: 0 auto;
         }
     </style>
 
 </head>
 
 <body>
-    <div class="carousel-wrap">
-        <div class="carousel-box">
-            <ul class="carousel-list">
-                <a href="javascript:;"><img src="img/temp_pic_1.jpg"></a>
-                <a href="javascript:;"><img src="img/temp_pic_2.jpg"></a>
-                <a href="javascript:;"><img src="img/temp_pic_3.jpg"></a>
-                <a href="javascript:;"><img src="img/temp_pic_4.jpg"></a>
-                <a href="javascript:;"><img src="img/temp_pic_5.jpg"></a>
-                <!-- 如果是要显示三张图片并排 那下面也是补开头三张，这样scrollLeft = 0的时候就不会有晃动 ，如果是一张显示 那就写一个就可以了-->
-                <!-- <a href="javascript:;"><img src="img/temp_pic_1.jpg"></a> -->
-            </ul>
-        </div>
-        <span class="arrows-pre">&#139</span>
-        <span class="arrows-next">&#155</span>
-        <div class="carousel-circle">
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
+    <div id="carousel">
+        <div class="carousel-wrap">
+            <div class="carousel-box">
+                <ul class="carousel-list">
+                    <li><img src="image/temp_pic_1.jpg"></li>
+                    <li><img src="image/temp_pic_2.jpg"></li>
+                    <li><img src="image/temp_pic_3.jpg"></li>
+                    <li><img src="image/temp_pic_4.jpg"></li>
+                    <li><img src="image/temp_pic_5.jpg"></li>
+                    <!-- 如果是要显示三张图片并排 那下面也是补开头三张，这样scrollLeft = 0的时候就不会有晃动 ，如果是一张显示 那就写一个就可以了-->
+                    <!-- <li><img src="img/temp_pic_1.jpg"></li> -->
+                </ul>
+            </div>
         </div>
     </div>
-
 </body>
 <script src="js/lib/jquery-1.11.1.min.js"></script>
 <script>
-    // ul的宽必须是两倍以上才能使用scrollLeft来进行轮换滑动
-    $("carousel-list").width(data.length * 3);
+    ; (function ($, win, doc, undefined) {
+
+        $.lxyCarousel = function (that, config, callback) {
+            var data = config.data || [];
+            var elem = {};
+            var Fun = {};
+            var timer = null; //定时器
+            var scrollLeft = 0; //水平移动的值
+            var lockState = true; // 点击多次也要等一次完成才可以，开关
+            //把传进来的参数和默认参数合并，config 会覆盖前面相同的key-value
+            var settings = $.extend({}, $.lxyCarousel.defaults, config);
+            var startX, startY, imgWidth;
+
+            Fun.init = function () {
+                elem.box = that.find('.carousel-box');
+                elem.wrap = that.find('.carousel-wrap');  //用来添加圆点指示器和箭头
+                elem.list = that.find('.carousel-list');  //用来设置宽度
+                elem.items = that.find('.carousel-list>li'); //用来获取 数量和宽度 来计算偏移量
+                elem.itemLength = elem.items.length; //图片的总数
+                // elem.itemLength = data.length;
+
+                // 没有元素或只有1个元素时，不进行滚动
+                if (elem.itemLength <= 1) { return };
+
+                elem.itemWidth = elem.items.outerWidth();
+                elem.itemHeight = elem.items.outerHeight();
+                elem.max = elem.itemWidth * elem.itemLength //max 总图片的宽，即总偏移量 
+                elem.min = 0;
+                elem.index = 0;
+                elem.list.width(elem.max * 3);
+                imgWidth = 15;
+                //要达到无限循环滚动不出现违和感需要在其后面加上
+                elem.list.append(elem.list.html());
+
+                // 是否展示箭头
+                if (settings.prevBtn) {
+                    elem.prevBtn = $('<a class="arrows-prev"></a>').prependTo(elem.wrap);
+                    elem.prevBtn.off('click').on("click", function () {
+                        Fun.goto({ dir: 'left' });
+
+                    })
+                };
+                if (settings.nextBtn) {
+                    elem.nextBtn = $('<a class="arrows-next"></a>').prependTo(elem.wrap);
+                    elem.nextBtn.off('click').on("click", function () {
+                        Fun.goto({ dir: 'right' });
+                    })
+                };
+                // 是否展示圆点
+                if (settings.circle) {
+                    var span = '';
+                    for (var i = 0; i < elem.itemLength; i++) {
+                        span += '<span></span>';
+                    }
+                    elem.wrap.append('<div class="carousel-circle">' + span + '</div>');
+                    elem.circle = that.find('.carousel-circle > span');
+                    elem.circle.eq(0).addClass("active");
+                    /*小点的鼠标移入事件，触发图片左移还是右移*/
+                    elem.circle.mouseenter(function () {
+                        //获取当前移入的index值
+                        $index = $(this).index();
+                        Fun.mousegoto({ step: $index });
+                    });
+                }
+
+                elem.box.on('touchstart', Fun.touchS).on('touchend', Fun.touchE);
+                if (settings.touchStop) {
+                    elem.box.mouseenter(function () {
+                        Fun.stop();
+                    }).mouseleave(function () {
+                        if (!timer) Fun.play();
+                    })
+                }
+                if (settings.auto) Fun.play();
+
+            };
+
+
+            // 方法：滚动
+            Fun.goto = function (obj) {
+                if (!lockState) return;
+                lockState = false; //开关
+                if (obj.dir == 'right') {
+                    elem.index++;
+                    //图片向左移动    当前的偏移量 + 1个图片的宽  *   一次要移动多少个图（即多少个图的宽总和，默认是一个）                      
+                    scrollLeft = elem.box.scrollLeft() + (elem.itemWidth * settings.step);
+                    if (scrollLeft > elem.max) scrollLeft = elem.max;
+                }
+                else if (obj.dir == 'left') {
+                    elem.index--;
+                    if (elem.box.scrollLeft() == elem.min) {
+                        elem.index = elem.itemLength - 1;
+                        elem.box.scrollLeft(elem.max);
+                    }
+                    scrollLeft = elem.box.scrollLeft() - (elem.itemWidth * settings.step);
+                }
+
+                elem.box.stop(true, true).animate({ 'scrollLeft': scrollLeft }, settings.speed,
+                    function () {
+                        if (scrollLeft >= elem.max) {
+                            elem.box.scrollLeft(0);
+                        }
+                        lockState = true;
+                    });
+                if (elem.index >= elem.itemLength) {
+                    elem.index = 0;//圆点重置为0
+                }
+
+                //改变圆点的颜色
+                if (settings.circle) {
+                    elem.circle.removeClass("active").eq(elem.index).addClass("active");
+                }
+            };
+            /*小点的鼠标移入事件，触发图片左移还是右移*/
+
+            Fun.mousegoto = function (obj) {
+                Fun.stop();
+                elem.index = obj.step;
+                scrollLeft = elem.itemWidth * elem.index;
+                elem.box.scrollLeft(scrollLeft);
+                //改变圆点的颜色
+                elem.circle.removeClass("active").eq(elem.index).addClass("active");
+            }
+
+            //手指移动开始
+            Fun.touchS = function (e) {
+                Fun.stop();
+                //设置触摸起始点水平方向位置
+                if (e.originalEvent.touches.length == 1) {
+                    startX = e.originalEvent.touches[0].clientX;
+                    startY = e.originalEvent.touches[0].clientY;
+                }
+            }
+
+            //手指移动结束
+            Fun.touchE = function (e) {
+                if (e.originalEvent.changedTouches.length == 1) {
+                    var startXend = e.originalEvent.changedTouches[0].clientX
+                        , startYend = e.originalEvent.changedTouches[0].clientY,
+                        moveX = startXend - startX;
+                    //对比的是px    负的为向左滑动 ,正是向右滑动
+                    if (moveX <= -imgWidth) {
+                        Fun.goto({ dir: 'right' });
+                    } else if (moveX >= imgWidth) {
+                        Fun.goto({ dir: 'left' });
+                    }
+                }
+            }
+
+            // 方法：开始
+            Fun.play = function () {
+                timer = setInterval(function () {
+                    Fun.goto({ dir: 'right' });
+                }, settings.time);
+            };
+            // 方法：停止
+            Fun.stop = function () {
+                clearInterval(timer);
+                timer = null;
+            };
+
+
+            Fun.init();
+        }
+
+        // 默认值 对JQ自身的扩展
+        $.lxyCarousel.defaults = {
+            step: 1,              // 滚动步长
+            speed: 800,           // 自动滚动速度
+            time: 1500,           // 自动滚动间隔时间
+            auto: true,           // 是否自动滚动
+            prevBtn: true,        // 是否使用 prev 按钮
+            nextBtn: true,        // 是否使用 next 按钮
+            circle: true,          // 是否使用 圆点指示器
+            touchStop: true,        //鼠标移入的时候停止播放
+        };
+        //给$ 扩展一个方法  $("body").cxScroll(a,b) 对JQ选中元素的方法的扩展
+        $.fn.lxyCarousel = function (settings, callback) {
+            this.each(function (i) {
+                $.lxyCarousel($(this), settings, callback);
+            });
+            return this;
+        }
+    })(jQuery, window, document);
+
+</script>
+<script>
+    $('#carousel').lxyCarousel({
+        speed: 800,              // 自动滚动速度
+        time: 2000,              // 自动滚动间隔时间
+        auto: false,             // 是否自动滚动
+        prevBtn: false,          // 是否使用 prev 按钮
+        nextBtn: false,         // 是否使用 next 按钮
+        circle: true,
+        touchStop: false,        //鼠标移入的时候停止播放
+    });
 </script>
 
 </html>
