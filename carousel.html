@@ -45,18 +45,17 @@
         }
 
         .carousel-list li {
-            width: 180px;
             height: 100%;
             float: left;
         }
 
-        .choose {
-            z-index: 1000;
-            position: absolute;
-            left: 150px;
-            top: 180px;
-            width: 100px;
-            height: 10px;
+        .carousel-list li img {
+            height: 100%;
+            width: 100%;
+            background-position: center;
+            background-repeat: no-repeat;
+            object-position: center;
+            /* object-fit: none; */
         }
 
         .carousel-circle {
@@ -80,6 +79,8 @@
 
         .carousel-circle span:last-child {
             margin-right: 0;
+            margin-left: 0;
+            margin: 0;
         }
 
         .carousel-circle .active {
@@ -110,10 +111,14 @@
             background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%2027%2044'%3E%3Cpath%20d%3D'M27%2C22L27%2C22L5%2C44l-2.1-2.1L22.8%2C22L2.9%2C2.1L5%2C0L27%2C22L27%2C22z'%20fill%3D'%23007aff'%2F%3E%3C%2Fsvg%3E");
         }
 
-        #carousel {
+        /* #carousel {
             height: 120px;
             width: 180px;
             margin: 0 auto;
+        } */
+        #carousel {
+            height: 470px;
+            width: 100%;
         }
     </style>
 
@@ -129,6 +134,11 @@
                     <li><img src="image/temp_pic_3.jpg"></li>
                     <li><img src="image/temp_pic_4.jpg"></li>
                     <li><img src="image/temp_pic_5.jpg"></li>
+                    <!-- <li><img src="image/swiper.png"></li>
+                    <li><img src="image/swiper.png"></li>
+                    <li><img src="image/swiper.png"></li>
+                    <li><img src="image/swiper.png"></li>
+                    <li><img src="image/swiper.png"></li> -->
                     <!-- 如果是要显示三张图片并排 那下面也是补开头三张，这样scrollLeft = 0的时候就不会有晃动 ，如果是一张显示 那就写一个就可以了-->
                     <!-- <li><img src="img/temp_pic_1.jpg"></li> -->
                 </ul>
@@ -155,33 +165,43 @@
                 elem.box = that.find('.carousel-box');
                 elem.wrap = that.find('.carousel-wrap');  //用来添加圆点指示器和箭头
                 elem.list = that.find('.carousel-list');  //用来设置宽度
-                elem.items = that.find('.carousel-list>li'); //用来获取 数量和宽度 来计算偏移量
-                elem.itemLength = elem.items.length; //图片的总数
+                elem.itemLength = that.find('.carousel-list>li').length;; //用来获取 图片的总数和宽度 来计算偏移量
+
                 // elem.itemLength = data.length;
 
                 // 没有元素或只有1个元素时，不进行滚动
                 if (elem.itemLength <= 1) { return };
 
-                elem.itemWidth = elem.items.outerWidth();
-                elem.itemHeight = elem.items.outerHeight();
-                elem.max = elem.itemWidth * elem.itemLength //max 总图片的宽，即总偏移量 
-                elem.min = 0;
-                elem.index = 0;
-                elem.list.width(elem.max * 3);
-                imgWidth = 15;
                 //要达到无限循环滚动不出现违和感需要在其后面加上
+
                 elem.list.append(elem.list.html());
+
+                elem.totalLi = that.find('.carousel-list>li');
+                if (settings.mode) {
+                    elem.totalLi.width(elem.box.width());
+                } else {
+                    elem.totalLi.width(elem.box.width() / 3);
+                }
+                elem.totalLi.css({ "margin-right": settings.margin_right });
+                elem.itemWidth = elem.totalLi.outerWidth(true);
+                elem.itemHeight = elem.totalLi.outerHeight(true);
+                elem.max = elem.itemWidth * elem.itemLength //max 总图片的宽，即总偏移量 
+                elem.min = 0;   //最小偏移量，即scrollLeft = 0的时候
+                elem.index = 0;//当前下标
+                elem.list.width(elem.max * 3);//ul的宽度
+                imgWidth = 15;//移动端手指向左向右滑动超过15 才会下一张图片
+
 
                 // 是否展示箭头
                 if (settings.prevBtn) {
-                    elem.prevBtn = $('<a class="arrows-prev"></a>').prependTo(elem.wrap);
+                    elem.prevBtn = $('<a class="arrows-prev"></a>').appendTo(elem.wrap);
                     elem.prevBtn.off('click').on("click", function () {
                         Fun.goto({ dir: 'left' });
 
                     })
                 };
                 if (settings.nextBtn) {
-                    elem.nextBtn = $('<a class="arrows-next"></a>').prependTo(elem.wrap);
+                    elem.nextBtn = $('<a class="arrows-next"></a>').appendTo(elem.wrap);
                     elem.nextBtn.off('click').on("click", function () {
                         Fun.goto({ dir: 'right' });
                     })
@@ -203,7 +223,7 @@
                     });
                 }
 
-                elem.box.on('touchstart', Fun.touchS).on('touchend', Fun.touchE);
+
                 if (settings.touchStop) {
                     elem.box.mouseenter(function () {
                         Fun.stop();
@@ -211,7 +231,31 @@
                         if (!timer) Fun.play();
                     })
                 }
-                if (settings.auto) Fun.play();
+
+                elem.box.on('touchstart', Fun.touchS).on('touchend', Fun.touchE);
+
+
+                win.addEventListener('resize', function () {
+                    if (settings.mode) {
+                        elem.totalLi.width(elem.box.width());
+                    } else {
+                        elem.totalLi.width(elem.box.width() / 3);
+
+                    }
+                    elem.totalLi.css({ "margin-right": settings.margin_right });
+                    elem.itemWidth = elem.totalLi.outerWidth(true);
+                    elem.itemHeight = elem.totalLi.outerHeight(true);
+                    elem.max = elem.itemWidth * elem.itemLength //max 总图片的宽，即总偏移量 
+                    elem.list.width(elem.max * 3);//ul的宽度
+                    elem.box.scrollLeft(elem.itemWidth * elem.index);
+                })
+
+                //自动播放
+                if (settings.auto) {
+                    setTimeout(Fun.play(), 30)
+                }
+
+
 
             };
 
@@ -305,14 +349,16 @@
 
         // 默认值 对JQ自身的扩展
         $.lxyCarousel.defaults = {
+            mode: true,
             step: 1,              // 滚动步长
             speed: 800,           // 自动滚动速度
             time: 1500,           // 自动滚动间隔时间
             auto: true,           // 是否自动滚动
-            prevBtn: true,        // 是否使用 prev 按钮
-            nextBtn: true,        // 是否使用 next 按钮
+            prevBtn: false,        // 是否使用 prev 按钮
+            nextBtn: false,        // 是否使用 next 按钮
             circle: true,          // 是否使用 圆点指示器
             touchStop: true,        //鼠标移入的时候停止播放
+            margin_right: 0,
         };
         //给$ 扩展一个方法  $("body").cxScroll(a,b) 对JQ选中元素的方法的扩展
         $.fn.lxyCarousel = function (settings, callback) {
@@ -326,13 +372,15 @@
 </script>
 <script>
     $('#carousel').lxyCarousel({
+        mode: true,              // 显示true: 1 张或者 false:3张
         speed: 800,              // 自动滚动速度
         time: 2000,              // 自动滚动间隔时间
         auto: false,             // 是否自动滚动
-        prevBtn: false,          // 是否使用 prev 按钮
-        nextBtn: false,         // 是否使用 next 按钮
-        circle: true,
+        prevBtn: true,          // 是否使用 prev 按钮
+        nextBtn: true,         // 是否使用 next 按钮
+        circle: true,           //是否显示指示点
         touchStop: false,        //鼠标移入的时候停止播放
+        margin_right: 15,               //图片间的间距
     });
 </script>
 
