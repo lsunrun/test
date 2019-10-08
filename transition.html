@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>点击生效</title>
+    <style>
+        div{
+            height: 50px;
+            width: 50px;
+            background: #aaa;
+            transition: width 2s;
+           
+        }
+       /* div:hover{
+            width: 150px;
+       } */
+        @keyframes aa{
+            0%{
+                height: 10px;
+            }
+            50%{
+                height: 100px;
+            }
+            100%{
+                height: 50px;
+            }
+        }
+    
+    </style>
+</head>
+<body>
+    <div onclick="c()" class="c">
+
+    </div>
+    <script>
+    function c(){
+         var s =document.getElementsByTagName('div')[0]
+         s.style.width="100px";
+         s.style.animation="aa 2s infinite"
+    }
+    </script>
+</body>
+</html>

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .main {
+            position: absolute;
+            width: 170px;
+            height: 170px;
+            left: 50%;
+            top: 50%;
+            /* transform: translate(-50%, -50%); */
+        }
+
+        span {
+            position: absolute;
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            border: 1px solid;
+            box-sizing: border-box;
+            text-align: center;
+            line-height: 49px;
+        }
+
+        span:nth-child(2) {
+            left: 60px;
+        }
+
+        span:nth-child(3) {
+            left: 120px;
+        }
+
+        span:nth-child(4) {
+            left: 120px;
+            top: 60px;
+        }
+
+        span:nth-child(5) {
+            left: 120px;
+            top: 120px;
+        }
+
+        span:nth-child(6) {
+            left: 60px;
+            top: 120px;
+        }
+
+        span:nth-child(7) {
+            top: 120px;
+        }
+
+        span:nth-child(8) {
+            top: 60px;
+
+        }
+
+        .draw {
+            /* height: 50px;
+            width: 50px; */
+            border: 2px solid #ddd;
+            /* position: absolute; */
+            box-sizing: border-box;
+            box-shadow: 0 0 9px #aaa;
+        }
+
+        /* .d1 {
+            animation: draw 0.4s;
+            animation-iteration-count: 5;
+        }
+
+        .d2 {
+            animation: draw 1.3s;
+            animation-iteration-count: 3;
+        }
+
+        .d3 {
+            animation: draw 2.1s;
+            animation-iteration-count: 2;
+        } */
+
+
+
+        /* @keyframes draw {
+            0% {
+                transform: translate(0, 0)
+            }
+
+            20% {
+                transform: translate(120px, 0);
+            }
+
+            40% {
+                transform: translate(120px, 120px);
+            }
+
+            80% {
+                transform: translate(0, 120px);
+            }
+
+            100% {
+                transform: translate(0, 0);
+            }
+        } */
+    </style>
+</head>
+
+<body>
+    <button class="bt">1</button>
+
+    <div class="main">
+        <span class="draw">1</span>
+        <span>2</span>
+        <span>3</span>
+        <span>4</span>
+        <span>5</span>
+        <span>6</span>
+        <span>7</span>
+        <span>8</span>
+        <!-- <div class="draw"></div> -->
+    </div>
+    <script>
+        var span = document.getElementsByTagName("span");
+        var bt = document.getElementsByClassName("bt")[0];
+        var timer = null;
+        var count = 0;
+        var index = 0;
+
+        bt.onclick = function () {
+            count = 0;
+            index = 0;
+            interval(40);
+        }
+
+        function interval(speed) {
+            clearInterval(timer);
+            timer = setInterval(function () {
+                count++;
+                for (var i = 0; i < span.length; i++) {
+                    span[i].classList.remove('draw');
+                }
+                span[index].classList.add('draw');
+                index++;
+                if (index == 8) {
+                    index = 0;
+                }
+                if (count == 16) { //第2圈
+                    interval(60)
+                } else if (count == 24) { //第3圈
+                    interval(80)
+                } else if (count == 32) { //4圈
+                    interval(100)
+                } else if (count == 33) {//
+                    interval(200)
+                } else if (count == 34) {//
+                    interval(500)
+                } else if (count == 36) {//
+                    interval(700)
+                } else if (count == 39) {
+                    clearInterval(timer);
+                    count = 0
+                }
+            }, speed)
+        }
+
+    </script>
+</body>
+
+</html>
