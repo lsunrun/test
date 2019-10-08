@@ -60,57 +60,26 @@
         }
 
         .draw {
-            /* height: 50px;
-            width: 50px; */
+
             border: 2px solid #ddd;
-            /* position: absolute; */
+
             box-sizing: border-box;
             box-shadow: 0 0 9px #aaa;
         }
 
-        /* .d1 {
-            animation: draw 0.4s;
-            animation-iteration-count: 5;
+        .bt {
+            height: 50px;
+            width: 50px;
+            position: absolute;
+            top: 60px;
+            left: 60px;
+            cursor: pointer;
         }
-
-        .d2 {
-            animation: draw 1.3s;
-            animation-iteration-count: 3;
-        }
-
-        .d3 {
-            animation: draw 2.1s;
-            animation-iteration-count: 2;
-        } */
-
-
-
-        /* @keyframes draw {
-            0% {
-                transform: translate(0, 0)
-            }
-
-            20% {
-                transform: translate(120px, 0);
-            }
-
-            40% {
-                transform: translate(120px, 120px);
-            }
-
-            80% {
-                transform: translate(0, 120px);
-            }
-
-            100% {
-                transform: translate(0, 0);
-            }
-        } */
     </style>
 </head>
 
 <body>
-    <button class="bt">1</button>
+
 
     <div class="main">
         <span class="draw">1</span>
@@ -121,7 +90,7 @@
         <span>6</span>
         <span>7</span>
         <span>8</span>
-        <!-- <div class="draw"></div> -->
+        <button class="bt">开始</button>
     </div>
     <script>
         var span = document.getElementsByTagName("span");
@@ -129,15 +98,21 @@
         var timer = null;
         var count = 0;
         var index = 0;
-
+        var flag = true;
+        var num = 0;
+        var arr = [39, 42, 44]
         bt.onclick = function () {
-            count = 0;
-            index = 0;
-            interval(40);
+            if (flag) {
+                count = 0;
+                index = 0;
+                interval(40);
+            }
+            flag = false;
         }
 
         function interval(speed) {
             clearInterval(timer);
+            num = parseInt(Math.random() * 3);
             timer = setInterval(function () {
                 count++;
                 for (var i = 0; i < span.length; i++) {
@@ -148,21 +123,26 @@
                 if (index == 8) {
                     index = 0;
                 }
+
                 if (count == 16) { //第2圈
                     interval(60)
-                } else if (count == 24) { //第3圈
+                } else if (count == 20) { //
                     interval(80)
-                } else if (count == 32) { //4圈
+                } else if (count == 24) { //
                     interval(100)
-                } else if (count == 33) {//
+                } else if (count == 28) {//
                     interval(200)
                 } else if (count == 34) {//
-                    interval(500)
+                    interval(300)
                 } else if (count == 36) {//
+                    interval(500)
+                } else if (count == 38) {//
                     interval(700)
-                } else if (count == 39) {
+                } else if (count >= arr[num]) {
+                    console.log(arr[num])
                     clearInterval(timer);
-                    count = 0
+                    count = 0;
+                    flag = true;
                 }
             }, speed)
         }
