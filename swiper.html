@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="./css/lib/swiper.min.css">
+    <style>
+        .swiper-container {
+            width: 600px;
+            height: 300px;
+            border: 1px solid #ccc;
+        }
+
+        .swiper-slide {
+            /* width: 187px; */
+            width: 160px ;
+
+        }
+     /* .swiper-slide img .swiper-slide  应该设置一样的宽   或者img 100% */
+        .swiper-slide img{
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Swiper -->
+    <div class="swiper-container">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide"><img src="./image/nature-1.jpg" alt=""></div>
+            <div class="swiper-slide"><img src="./image/nature-2.jpg" alt=""></div>
+            <div class="swiper-slide"><img src="./image/nature-3.jpg" alt=""></div>
+            <div class="swiper-slide"><img src="./image/nature-4.jpg" alt=""></div>
+            <div class="swiper-slide"><img src="./image/nature-5.jpg" alt=""></div>
+            <div class="swiper-slide"><img src="./image/nature-6.jpg" alt=""></div>
+            <div class="swiper-slide"><img src="./image/nature-7.jpg" alt=""></div>
+            <div class="swiper-slide"><img src="./image/nature-8.jpg" alt=""></div>
+            <div class="swiper-slide"><img src="./image/nature-9.jpg" alt=""></div>
+            <div class="swiper-slide"><img src="./image/nature-10.jpg" alt=""></div>
+        </div>
+
+        <!-- 如果需要分页器 -->
+        <div class="swiper-pagination"></div>
+
+        <!-- 如果需要导航按钮 -->
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-button-next"></div>
+    </div>
+    <!-- Swiper JS -->
+    <script src="./js/lib/swiper.min.js"></script>
+
+    <!-- Initialize Swiper -->
+    <script>
+        var swiper = new Swiper('.swiper-container', {
+            // autoplay: true,//可选选项，自动滑动
+            //设置slider容器能够同时显示的slides(页面同时显示多少张图)数量
+            slidesPerView: 2.3,
+            // slidesPerView: 'auto',
+            // 在carousel mode下定义slides的数量多少为一组。 一次滑动多少张图
+            // slidesPerGroup: 3,
+            slidesPerGroup: 1,
+
+            spaceBetween: 20,
+            // loop: true,
+            // 如果需要分页器
+            pagination: {
+                el: '.swiper-pagination',
+                //此参数设置为true时，点击分页器的指示点分页器会控制Swiper切换。
+                clickable: true,
+            },
+
+            // 如果需要前进后退按钮
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+            // resistanceRatio: 0, //禁止回弹
+            //设定slide与左边框的预设偏移量（单位px）。
+            slidesOffsetBefore : -90,
+            //设定slide与右边框的预设偏移量（单位px）。
+            // slidesOffsetAfter : 100,
+            //当改变swiper的样式（例如隐藏/显示）或者修改swiper的子元素时，自动初始化swiper。
+            //默认false，不开启，可以使用update()方法更新。 操作轮播图后实时刷新
+            observer:true,
+        });
+    </script>
+</body>
+
+</html>
