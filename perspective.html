@@ -1,0 +1,81 @@
+<html>
+  <head>
+            <style>
+            .pers250 {
+                perspective: 250px;
+            }
+
+            /* Define the container div, the cube div, and a generic face */
+            .container {
+                width: 100px;
+                height: 100px;
+                margin: 50px auto;
+                border: none;
+            }
+
+            .cube {
+                width: 100%;
+                height: 100%;
+                backface-visibility: visible;
+                transform-style: preserve-3d;
+            }
+
+            .face {
+                display: block;
+                position: absolute;
+                width: 100px;
+                height: 100px;
+                border: none;
+                line-height: 100px;
+                font-family: sans-serif;
+                font-size: 60px;
+                color: white;
+                text-align: center;
+            }
+
+            /* Define each face based on direction */
+            .front {
+                background: rgba(0, 0, 0, 0.3);
+                transform: translateZ(50px);
+            }
+
+            .back {
+                background: rgba(0, 255, 0, 1);
+                color: black;
+                transform: rotateY(180deg) translateZ(50px);
+            }
+
+            .right {
+                background: rgba(196, 0, 0, 0.7);
+                transform: rotateY(90deg) translateZ(50px);
+            }
+
+            .left {
+                background: rgba(0, 0, 196, 0.7);
+                transform: rotateY(-90deg) translateZ(50px);
+            }
+
+            .top {
+                background: rgba(196, 196, 0, 0.7);
+                transform: rotateX(90deg) translateZ(50px);
+            }
+
+            .bottom {
+                background: rgba(196, 0, 196, 0.7);
+                transform: rotateX(-90deg) translateZ(50px);
+            }
+        </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="cube pers250">
+        <div class="face front">1</div>
+        <div class="face back">2</div>
+        <div class="face right">3</div>
+        <div class="face left">4</div>
+        <div class="face top">5</div>
+        <div class="face bottom">6</div>
+      </div>
+    </div>
+  </body>
+</html>
