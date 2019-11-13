@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/lib/common.css">
+    <style>
+        .cc {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: 100px;
+            height: 50px;
+        }
+
+        button {
+            background: #ccc;
+            width: 100px;
+            height: 50px;
+        }
+
+        .dyline {
+            position: absolute;
+            display: inline-block;
+            width: 12px;
+            height: 4px;
+            background: #000;
+
+        }
+
+        .dyline:nth-of-type(1) {
+            transition: all 1s;
+            left: 0;
+            top: -2px;
+        }
+
+        .dyline:last-of-type {
+            opacity: 0;
+            right: 0;
+            bottom: -2px;
+            transition: all 1s;
+
+        }
+
+        .dyL {
+            position: absolute;
+            display: inline-block;
+            width: 4px;
+            height: 12px;
+            background: #000;
+            transition: all 1s;
+            left: -2px;
+            bottom: 0;
+            opacity: 0;
+
+        }
+
+        .dyR {
+            position: absolute;
+            display: inline-block;
+            width: 4px;
+            height: 12px;
+            background: #000;
+            transition: all 1s;
+            top: 0;
+            right: -2px;
+            opacity: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="cc">
+        <span class="dyline"></span>
+        <span class="dyL"></span>
+        <button>闪亮</button>
+        <span class="dyR"></span>
+        <span class="dyline"></span>
+    </div>
+    <script>
+        var dyline = document.getElementsByClassName("dyline");
+        var dyL = document.getElementsByClassName("dyL")[0];
+        var dyR = document.getElementsByClassName("dyR")[0];
+        var flag = 1;
+        setTimeout(function () {
+
+            dyline[0].style.left = '90px';
+
+        })
+        dyline[0].addEventListener('transitionend', function () {
+            console.log(2);
+            if (flag == 1) {
+                dyline[0].style.opacity = 0;
+                dyline[0].style.left = 0;
+                dyR.style.opacity = 1;
+                dyR.style.top = '38px';
+                flag = 2
+            }
+        })
+
+        dyR.addEventListener('transitionend', function () {
+            console.log(3);
+            if (flag == 2) {
+                dyR.style.opacity = 0;
+                dyR.style.top = 0;
+                dyline[1].style.opacity = 1;
+                dyline[1].style.right = '90px';
+                flag = 3
+            }
+        })
+        dyline[1].addEventListener('transitionend', function () {
+            console.log(4);
+            if (flag == 3) {
+                dyline[1].style.opacity = 0;
+                dyline[1].style.right = 0;
+                dyL.style.opacity = 1;
+                dyL.style.bottom = '38px';
+                flag = 4
+            }
+
+        })
+        dyL.addEventListener('transitionend', function () {
+            console.log(5);
+            if (flag == 4) {
+                dyL.style.opacity = 0;
+                dyL.style.bottom = 0;
+                dyline[0].style.opacity = 1;
+                dyline[0].style.left = '90px';
+                flag = 1
+            }
+        })
+    </script>
+</body>
+
+</html>

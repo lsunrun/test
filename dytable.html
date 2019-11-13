@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .mask {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #ccc;
+            width: 300px;
+            height: 100px;
+            display: none;
+        }
+
+        img {
+            width: 50px;
+            height: 50px;
+            position: relative;
+        }
+
+        .imgArrShow span {
+            display: inline-block;
+
+            color: #000;
+            cursor: pointer;
+            position: absolute;
+            right:-11px;
+            top: 0;
+            z-index: 10;
+        }
+
+        .asd {
+            position: relative;
+            display: inline-block;
+            margin-right: 15px;
+        }
+    </style>
+</head>
+
+<body>
+    <button id="new">新增素材</button>
+    <table id="mytable" style="border:1px solid #ccc">
+        <thead>
+            <tr>
+                <th>序号</th>
+                <th>素材</th>
+                <th>请输入标题</th>
+                <th>选择分组</th>
+                <th>请输入关键字</th>
+            </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
+    <div class="mask">
+        <input id="files" type="file" multiple="multiple" accept="image/jpeg,image/jpg,image/png"
+            onchange="changepic(this)">
+        <div class="imgArrShow"></div>
+        <button id="sure" disabled>确定</button>
+    </div>
+    <script src="js/lib/jquery-1.11.1.min.js"></script>
+    <script>
+        var imgArr = [];
+        $("#new").click(function () {
+            var m = $(".mask");
+            if (m.css("display") == 'none') {
+                $(".mask").show();
+                imgArr = [];
+                $("#files")[0].value = '';
+                $(".imgArrShow").empty();
+            }
+        })
+        function changepic(event) {
+            for (var i = 0; i < event.files.length; i++) {
+                var file = event.files[i];
+                var reader = new FileReader();
+
+                if (file) {
+                    var fileSize = file.size / (1024 * 1024);
+                    // 限制文件大小
+                    if (fileSize > 5) {
+                        alert(file.name + " 文件大小超过5M");
+                        return;
+                    }
+                    // 限制文件类型
+                    if (!(file.type == "image/png" || file.type == "image/jpeg" || file.type == "image/jpg")) {
+                        alert(file.name + " 不支持的文件类型");
+                        return;
+                    }
+                    if (event.files.length >= 5) {
+                        alert("不能超过5条");
+                        return;
+                    }
+                    if (imgArr.length >= 5) {
+                        alert("不能超过5条");
+                        return;
+                    }
+                }
+                reader.file = file
+                reader.fid = "id" + Math.random();
+                reader.readAsDataURL(file);//转化二进制流
+                reader.onload = function (e) {
+                    console.log(reader);
+                    //图片路径设置为读取的图片
+                    var img = new Image();
+                    img.src = this.result;
+                    var ss = $('<div class="asd"><span data-fid="' + this.fid + '"  onclick="removet(this)">X</span></div>');
+                    $(".imgArrShow").append(ss);
+                    ss.append(img)
+                    $("#sure").removeAttr("disabled")
+                };
+                imgArr.push(reader)
+            }
+        }
+        var index = 1;
+        $("#sure").click(function () {
+            $(".mask").hide();
+            var html = '';
+            for (var i = 0; i < imgArr.length; i++) {
+                html += '<tr>';
+                html += '<td>';
+                html += index++;
+                html += '</td> ';
+                html += '<td>';
+                html += '<img src="' + imgArr[i].result + '">';
+                html += '</td> ';
+                html += '</tr>';
+            }
+            $("#mytable tbody").append(html);
+
+        })
+        function removet(fileViewItemDom) {
+            var fid = fileViewItemDom.getAttribute('data-fid');
+            fileViewItemDom.parentNode.remove();
+            if (imgArr && imgArr.length > 0) {
+                for (var i = 0; i < imgArr.length; ++i) {
+                    if (imgArr[i].fid == fid) {
+                        imgArr.splice(i, 1);
+                        break;
+                    }
+                }
+            }
+            return true;
+        }
+
+    </script>
+</body>
+
+</html>
